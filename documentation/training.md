@@ -32,8 +32,8 @@ The following datasets are used during our training.
         * [dvm_background_train_clips.txt](/documentation/misc/dvm_background_train_clips.txt)
         * [dvm_background_test_clips.txt](/documentation/misc/dvm_background_test_clips.txt)
     * You can download our preprocessed versions:
-        * [Train set (14.6G)](https://robustvideomatting.s3.us-west-2.amazonaws.com/data/BackgroundVideosTrain.tar) (Manually move some clips to validation set)
-        * [Test set (936M)](https://robustvideomatting.s3.us-west-2.amazonaws.com/data/BackgroundVideosTest.tar) (Not needed for training. Only used for making synthetic test samples for evaluation)
+        * [Train set (14.6G)](https://robustvideomatting.blob.core.windows.net/data/BackgroundVideosTrain.tar) (Manually move some clips to validation set)
+        * [Test set (936M)](https://robustvideomatting.blob.core.windows.net/data/BackgroundVideosTest.tar) (Not needed for training. Only used for making synthetic test samples for evaluation)
 * Image Backgrounds
     * Train set:
         * We crawled 8000 suitable images from Google and Flicker.
@@ -55,7 +55,7 @@ The following datasets are used during our training.
 * [Supervisely Person Dataset](https://supervise.ly/explore/projects/supervisely-person-dataset-23304/datasets)
     * We used the supervisedly library to convert their encoding to bitmaps masks before using our script. We also resized down some of the large images to avoid disk loading bottleneck.
     * You can refer to [spd_preprocess.py](/documentation/misc/spd_preprocess.py)
-    * Or, you can download our [preprocessed version (800M)](https://robustvideomatting.s3.us-west-2.amazonaws.com/data/SuperviselyPersonDataset.tar)
+    * Or, you can download our [preprocessed version (800M)](https://robustvideomatting.blob.core.windows.net/data/SuperviselyPersonDataset.tar)
 
 ## Training
 
@@ -152,7 +152,7 @@ We synthetically composite test samples to both image and video backgrounds. Ima
 
 We only provide the composited VideoMatte240K test set. They are used in our paper evaluation. For D646 and AIM, you need to acquire the data from their authors and composite them yourself. The composition scripts we used are saved in `/evaluation` folder as reference backup. You need to modify them based on your setup.
 
-* [videomatte_512x512.tar (PNG 1.8G)](https://robustvideomatting.s3.us-west-2.amazonaws.com/eval/videomatte_512x288.tar)
-* [videomatte_1920x1080.tar (JPG 2.2G)](https://robustvideomatting.s3.us-west-2.amazonaws.com/eval/videomatte_1920x1080.tar)
+* [videomatte_512x512.tar (PNG 1.8G)](https://robustvideomatting.blob.core.windows.net/eval/videomatte_512x288.tar)
+* [videomatte_1920x1080.tar (JPG 2.2G)](https://robustvideomatting.blob.core.windows.net/eval/videomatte_1920x1080.tar)
 
 Evaluation scripts are provided in `/evaluation` folder.
