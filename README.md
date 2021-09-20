@@ -217,6 +217,13 @@ Speed is measured with `inference_speed_test.py` for reference.
 * Note 2: GPUs before Turing architecture does not support FP16 inference, so GTX 1080 Ti uses FP32.
 * Note 3: We only measure tensor throughput. The provided video conversion script in this repo is expected to be much slower, because it does not utilize hardware video encoding/decoding and does not have the tensor transfer done on parallel threads. If you are interested in implementing hardware video encoding/decoding in Python, please refer to [PyNvCodec](https://github.com/NVIDIA/VideoProcessingFramework).
 
+<br>  
+
+## Third-party Resources  
+
+* NCNN C++ and Android Demo: [ncnn_Android_RobustVideoMatting](https://github.com/FeiGeChuanShu/ncnn_Android_RobustVideoMatting) from [FeiGeChuanShu](https://github.com/FeiGeChuanShu)
+* ONNXRuntime C++ Demo: [lite.ai.toolkit](https://github.com/DefTruth/lite.ai.toolkit/blob/main/ort/cv/rvm.cpp) from [DefTruth](https://github.com/DefTruth)
+
 <br>
 
 ## Project Members
