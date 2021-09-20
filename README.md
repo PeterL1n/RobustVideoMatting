@@ -222,7 +222,7 @@ Speed is measured with `inference_speed_test.py` for reference.
 ## Third-party Resources  
 
 * NCNN C++ and Android Demo: [ncnn_Android_RobustVideoMatting](https://github.com/FeiGeChuanShu/ncnn_Android_RobustVideoMatting) from [FeiGeChuanShu](https://github.com/FeiGeChuanShu)
-* ONNXRuntime C++ Demo: [lite.ai.toolkit](https://github.com/DefTruth/lite.ai.toolkit/blob/main/ort/cv/rvm.cpp) from [DefTruth](https://github.com/DefTruth)
+* ONNXRuntime C++ Demo: [lite.ai.toolkit](https://github.com/DefTruth/lite.ai.toolkit/blob/main/ort/cv/rvm.cpp) and [demo](https://github.com/DefTruth/RobustVideoMatting.lite.ai.toolkit) from [DefTruth](https://github.com/DefTruth)
 
 <br>
 
