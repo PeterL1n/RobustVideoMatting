@@ -216,16 +216,17 @@ convert_video = torch.hub.load("PeterL1n/RobustVideoMatting", "converter")
 * 注释2：图灵架构之前的 GPU 不支持 FP16 推理，所以 GTX 1080 Ti 使用 FP32。
 * 注释3：我们只测量张量吞吐量（tensor throughput）。 提供的视频转换脚本会慢得多，因为它不使用硬件视频编码/解码，也没有在并行线程上完成张量传输。如果您有兴趣在 Python 中实现硬件视频编码/解码，请参考 [PyNvCodec](https://github.com/NVIDIA/VideoProcessingFramework)。
 
-<br>  
-
-## 第三方资源  
-
-* NCNN C++ and Android Demo: [ncnn_Android_RobustVideoMatting](https://github.com/FeiGeChuanShu/ncnn_Android_RobustVideoMatting) from [FeiGeChuanShu](https://github.com/FeiGeChuanShu)
-* ONNXRuntime C++ Demo: [lite.ai.toolkit](https://github.com/DefTruth/lite.ai.toolkit/blob/main/ort/cv/rvm.cpp) and [demo](https://github.com/DefTruth/RobustVideoMatting.lite.ai.toolkit) from [DefTruth](https://github.com/DefTruth)
-
+<br>
 
 ## 项目成员
 * [Shanchuan Lin](https://www.linkedin.com/in/shanchuanlin/)
 * [Linjie Yang](https://sites.google.com/site/linjieyang89/)
 * [Imran Saleemi](https://www.linkedin.com/in/imran-saleemi/)
 * [Soumyadip Sengupta](https://homes.cs.washington.edu/~soumya91/)
+
+<br>
+
+## 第三方资源
+
+* [NCNN C++ Android](https://github.com/FeiGeChuanShu/ncnn_Android_RobustVideoMatting) ([@FeiGeChuanShu](https://github.com/FeiGeChuanShu))
+* [lite.ai.toolkit](https://github.com/DefTruth/RobustVideoMatting.lite.ai.toolkit) ([@DefTruth](https://github.com/DefTruth))
