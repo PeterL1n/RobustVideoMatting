@@ -101,9 +101,9 @@ def convert_video(model,
         if output_composition is not None:
             writer_com = ImageSequenceWriter(output_composition, 'png')
         if output_alpha is not None:
-            writer_pha = VideoWriter(output_alpha, 'png')
+            writer_pha = ImageSequenceWriter(output_alpha, 'png')
         if output_foreground is not None:
-            writer_fgr = VideoWriter(output_foreground, 'png')
+            writer_fgr = ImageSequenceWriter(output_foreground, 'png')
 
     # Inference
     model = model.eval()
