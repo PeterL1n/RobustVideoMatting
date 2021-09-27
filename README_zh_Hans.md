@@ -229,4 +229,6 @@ convert_video = torch.hub.load("PeterL1n/RobustVideoMatting", "converter")
 ## 第三方资源
 
 * [NCNN C++ Android](https://github.com/FeiGeChuanShu/ncnn_Android_RobustVideoMatting) ([@FeiGeChuanShu](https://github.com/FeiGeChuanShu))
-* [lite.ai.toolkit](https://github.com/DefTruth/RobustVideoMatting.lite.ai.toolkit) ([@DefTruth](https://github.com/DefTruth))
+* [lite.ai.toolkit](https://github.com/DefTruth/RobustVideoMatting.lite.ai.toolkit) ([@DefTruth](https://github.com/DefTruth)
+
+1af31d19508b7f3facc0dcc58f6baea2be7f652a
