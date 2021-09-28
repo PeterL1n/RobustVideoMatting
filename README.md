@@ -137,7 +137,6 @@ All models are available in [Google Drive](https://drive.google.com/drive/folder
 
 ---
 
-```
 1. Install dependencies:
 ```sh
 pip install -r requirements_inference.txt
