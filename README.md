@@ -131,7 +131,13 @@ All models are available in [Google Drive](https://drive.google.com/drive/folder
 <br>
 
 ## PyTorch Example
+<details><summary><b>Show instructions</b></summary>
 
+### Note if your PC has a GPU installed, see this link to install [pytorch locally](https://pytorch.org/get-started/locally/)
+
+---
+
+```
 1. Install dependencies:
 ```sh
 pip install -r requirements_inference.txt
@@ -195,6 +201,7 @@ convert_video = torch.hub.load("PeterL1n/RobustVideoMatting", "converter")
 
 Please see [inference documentation](documentation/inference.md) for details on `downsample_ratio` hyperparameter, more converter arguments, and more advanced usage.
 
+</details>
 <br>
 
 ## Training and Evaluation

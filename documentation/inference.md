@@ -146,6 +146,9 @@ convert_video(
 
 The converter can also be invoked in command line:
 
+For the checkpoint flag, use the canonical path to the model. The models can be downloaded under the  [Download Section](../README.md#Download)
+
+---
 ```sh
 python inference.py \
     --variant mobilenetv3 \
