@@ -47,7 +47,7 @@ DATA_PATHS = {
     },
     'background_videos': {
         'train': '../matting-data/BackgroundVideos/train',
-        'valid': '../matting-data/BackgroundVideos/train',
+        'valid': '../matting-data/BackgroundVideos/valid',
     },
     
     
