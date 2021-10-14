@@ -24,7 +24,7 @@
     </a>
 </p>
 
-视频中的所有素材都提供下载，可用于测试模型：[Google Drive](https://drive.google.com/drive/folders/1VFnWwuu-YXDKG-N6vcjK_nL7YZMFapMU?usp=sharing) 或[百度网盘](https://pan.baidu.com/s/1igMteDwN5rO1Sn7YIhBlvQ)（密码: tb3w）
+视频中的所有素材都提供下载，可用于测试模型：[Google Drive](https://drive.google.com/drive/folders/1VFnWwuu-YXDKG-N6vcjK_nL7YZMFapMU?usp=sharing)
 
 <br>
 

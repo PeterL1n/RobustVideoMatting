@@ -25,7 +25,7 @@ Watch the showreel video ([YouTube](https://youtu.be/Jvzltozpbpk), [Bilibili](ht
     </a>
 </p>
 
-All footage in the video are available in [Google Drive](https://drive.google.com/drive/folders/1VFnWwuu-YXDKG-N6vcjK_nL7YZMFapMU?usp=sharing) and [Baidu Pan](https://pan.baidu.com/s/1igMteDwN5rO1Sn7YIhBlvQ) (code: tb3w).
+All footage in the video are available in [Google Drive](https://drive.google.com/drive/folders/1VFnWwuu-YXDKG-N6vcjK_nL7YZMFapMU?usp=sharing).
 
 <br>
 
