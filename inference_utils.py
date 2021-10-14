@@ -3,7 +3,7 @@ import os
 import pims
 import numpy as np
 from torch.utils.data import Dataset
-from torchvision.transforms.functional import to_pil_image
+from torchvision.transforms.functional import to_pil_image, pil_to_tensor
 from PIL import Image
 
 
@@ -52,6 +52,20 @@ class VideoWriter:
         self.container.close()
 
 
+class ImageReader:
+    def __init__(self, path, transform=None):
+        self.path = path
+        self.transform = transform
+
+    def data(self):
+        with Image.open(self.path) as img:
+            img.load()
+
+        if self.transform is not None:
+            return self.transform(img)
+        return img
+
+
 class ImageSequenceReader(Dataset):
     def __init__(self, path, transform=None):
         self.path = path
@@ -85,4 +99,3 @@ class ImageSequenceWriter:
             
     def close(self):
         pass
-        

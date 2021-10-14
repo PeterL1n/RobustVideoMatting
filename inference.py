@@ -20,6 +20,8 @@ from typing import Optional, Tuple
 from tqdm.auto import tqdm
 
 from inference_utils import VideoReader, VideoWriter, ImageSequenceReader, ImageSequenceWriter
+from inference_utils import ImageReader
+
 
 def convert_video(model,
                   input_source: str,
@@ -27,6 +29,7 @@ def convert_video(model,
                   downsample_ratio: Optional[float] = None,
                   output_type: str = 'video',
                   output_composition: Optional[str] = None,
+                  bgr_source: Optional[str] = None,
                   output_alpha: Optional[str] = None,
                   output_foreground: Optional[str] = None,
                   output_video_mbps: Optional[float] = None,
@@ -46,6 +49,8 @@ def convert_video(model,
             The composition output path. File path if output_type == 'video'. Directory path if output_type == 'png_sequence'.
             If output_type == 'video', the composition has green screen background.
             If output_type == 'png_sequence'. the composition is RGBA png images.
+        bgr_source: A video file, image sequence directory, or an individual image.
+            This is only applicable if you choose output_type == video.
         output_alpha: The alpha output from the model.
         output_foreground: The foreground output from the model.
         seq_chunk: Number of frames to process at once. Increase it for better parallelism.
@@ -112,8 +117,12 @@ def convert_video(model,
         device = param.device
     
     if (output_composition is not None) and (output_type == 'video'):
-        bgr = torch.tensor([120, 255, 155], device=device, dtype=dtype).div(255).view(1, 1, 3, 1, 1)
-    
+        if bgr_source is not None and os.path.isfile(bgr_source):
+            bgr = ImageReader(bgr_source, transform=transform).data()
+            bgr = bgr.to(device, dtype, non_blocking=True).unsqueeze(0) # [B, T, C, H, W]
+        else:
+            bgr = torch.tensor([120, 255, 155], device=device, dtype=dtype).div(255).view(1, 1, 3, 1, 1)
+
     try:
         with torch.no_grad():
             bar = tqdm(total=len(source), disable=not progress, dynamic_ncols=True)
