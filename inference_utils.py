@@ -12,14 +12,14 @@ class VideoReader(Dataset):
         self.video = pims.PyAVVideoReader(path)
         self.rate = self.video.frame_rate
         self.transform = transform
-        
+
     @property
     def frame_rate(self):
         return self.rate
-        
+
     def __len__(self):
         return len(self.video)
-        
+
     def __getitem__(self, idx):
         frame = self.video[idx]
         frame = Image.fromarray(np.asarray(frame))
@@ -57,10 +57,10 @@ class ImageSequenceReader(Dataset):
         self.path = path
         self.files = sorted(os.listdir(path))
         self.transform = transform
-        
+
     def __len__(self):
         return len(self.files)
-    
+
     def __getitem__(self, idx):
         with Image.open(os.path.join(self.path, self.files[idx])) as img:
             img.load()
@@ -75,14 +75,40 @@ class ImageSequenceWriter:
         self.extension = extension
         self.counter = 0
         os.makedirs(path, exist_ok=True)
-    
+
     def write(self, frames):
         # frames: [T, C, H, W]
         for t in range(frames.shape[0]):
             to_pil_image(frames[t]).save(os.path.join(
                 self.path, str(self.counter).zfill(4) + '.' + self.extension))
             self.counter += 1
-            
+
     def close(self):
         pass
-        
+
+
+class AudioVideoWriter(VideoWriter):
+    def __init__(self, path, frame_rate, audio_stream=None, bit_rate=1000000):
+        super(AudioVideoWriter, self).__init__(
+            path=path,
+            frame_rate=frame_rate,
+            bit_rate=bit_rate
+        )
+        self.source_audio_stream = audio_stream
+        self.output_audio_stream = self.container.add_stream(
+            codec_name=self.source_audio_stream.codec_context.codec.name,
+            rate=self.source_audio_stream.rate,
+        )
+
+    def remux_audio(self):
+        input_audio_container = self.source_audio_stream.container
+        for packet in input_audio_container.demux(self.source_audio_stream):
+            if packet.dts is None:
+                continue
+            packet.stream = self.output_audio_stream
+            self.container.mux(packet)
+
+    def close(self):
+        self.remux_audio()
+        self.container.mux(self.output_audio_stream.encode())
+        super(AudioVideoWriter, self).close()
