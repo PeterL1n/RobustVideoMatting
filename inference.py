@@ -20,7 +20,7 @@ from typing import Optional, Tuple
 from tqdm.auto import tqdm
 
 from inference_utils import VideoReader, VideoWriter, ImageSequenceReader, ImageSequenceWriter
-from inference_utils import ImageReader
+from inference_utils import ImageReader, ConstantImage
 
 
 def convert_video(model,
@@ -115,20 +115,24 @@ def convert_video(model,
         param = next(model.parameters())
         dtype = param.dtype
         device = param.device
-    
+
     if (output_composition is not None) and (output_type == 'video'):
         if bgr_source is not None and os.path.isfile(bgr_source):
-            bgr = ImageReader(bgr_source, transform=transform).data()
-            bgr = bgr.to(device, dtype, non_blocking=True).unsqueeze(0) # [B, T, C, H, W]
+            if os.path.isfile(bgr_source):
+                if os.path.splitext(bgr_source)[-1].lower() in [".png", ".jpg"]:
+                    bgr_raw = ImageReader(bgr_source, transform=transform)
+                else:
+                    bgr_raw = VideoReader(bgr_source, transform)
+            else:
+                bgr_raw = ImageSequenceReader(bgr_source, transform)
         else:
-            bgr = torch.tensor([120, 255, 155], device=device, dtype=dtype).div(255).view(1, 1, 3, 1, 1)
+            bgr_raw = ConstantImage(120, 255, 155, device=device, dtype=dtype)
 
     try:
         with torch.no_grad():
             bar = tqdm(total=len(source), disable=not progress, dynamic_ncols=True)
             rec = [None] * 4
-            for src in reader:
-
+            for index, src in enumerate(reader):
                 if downsample_ratio is None:
                     downsample_ratio = auto_downsample_ratio(*src.shape[2:])
 
@@ -141,6 +145,7 @@ def convert_video(model,
                     writer_pha.write(pha[0])
                 if output_composition is not None:
                     if output_type == 'video':
+                        bgr = bgr_raw[index].to(device, dtype, non_blocking=True).unsqueeze(0) # [B, T, C, H, W]
                         com = fgr * pha + bgr * (1 - pha)
                     else:
                         fgr = fgr * pha.gt(0)

@@ -2,6 +2,7 @@ import av
 import os
 import pims
 import numpy as np
+import torch
 from torch.utils.data import Dataset
 from torchvision.transforms.functional import to_pil_image, pil_to_tensor
 from PIL import Image
@@ -34,7 +35,7 @@ class VideoWriter:
         self.stream = self.container.add_stream('h264', rate=round(frame_rate))
         self.stream.pix_fmt = 'yuv420p'
         self.stream.bit_rate = bit_rate
-    
+
     def write(self, frames):
         # frames: [T, C, H, W]
         self.stream.width = frames.size(3)
@@ -46,24 +47,37 @@ class VideoWriter:
             frame = frames[t]
             frame = av.VideoFrame.from_ndarray(frame, format='rgb24')
             self.container.mux(self.stream.encode(frame))
-                
+
     def close(self):
         self.container.mux(self.stream.encode())
         self.container.close()
 
 
-class ImageReader:
+class ImageReader(Dataset):
     def __init__(self, path, transform=None):
         self.path = path
         self.transform = transform
 
-    def data(self):
+    def __len__(self):
+        return 1
+
+    def __getitem__(self, idx):
         with Image.open(self.path) as img:
             img.load()
-
         if self.transform is not None:
             return self.transform(img)
         return img
+
+
+class ConstantImage(Dataset):
+    def __init__(self, r, g, b, device=None, dtype=None):
+        self.tensor = torch.tensor([r, g, b], device=device, dtype=dtype).div(255).view(1, 1, 3, 1, 1)
+
+    def __len__(self):
+        return 1
+
+    def __getitem__(self, idx):
+        return self.tensor
 
 
 class ImageSequenceReader(Dataset):
