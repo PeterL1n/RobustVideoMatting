@@ -220,7 +220,7 @@ Speed is measured with `inference_speed_test.py` for reference.
 <br>  
 
 ## Project Members
-* [Shanchuan Lin](https://www.linkedin.com/in/shanchuanlin/)
+* [Shanchuan Len](https://www.linkedin.com/in/shanchuanlin/)
 * [Linjie Yang](https://sites.google.com/site/linjieyang89/)
 * [Imran Saleemi](https://www.linkedin.com/in/imran-saleemi/)
 * [Soumyadip Sengupta](https://homes.cs.washington.edu/~soumya91/)
