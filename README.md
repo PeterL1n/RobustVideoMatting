@@ -233,4 +233,4 @@ Speed is measured with `inference_speed_test.py` for reference.
 * [lite.ai.toolkit](https://github.com/DefTruth/RobustVideoMatting.lite.ai.toolkit) ([@DefTruth](https://github.com/DefTruth))
 * [Gradio Web Demo](https://huggingface.co/spaces/akhaliq/Robust-Video-Matting) ([@AK391](https://github.com/AK391))
 * [Unity Engine demo with NatML](https://hub.natml.ai/@natsuite/robust-video-matting) ([@natsuite](https://github.com/natsuite))  
-* [MNN C++ Demo](https://github.com/DefTruth/lite.ai.toolkit/blob/main/mnn/cv/mnn_rvm.cpp) ([@DefTruth](https://github.com/DefTruth))
+* [MNN C++ Demo](https://github.com/DefTruth/lite.ai.toolkit/blob/main/lite/mnn/cv/mnn_rvm.cpp) ([@DefTruth](https://github.com/DefTruth))
