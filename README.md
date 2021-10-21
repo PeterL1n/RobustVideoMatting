@@ -19,7 +19,7 @@ The following procedures were used to generate our ONNX models.
 pip install -r requirements.txt
 ```
 
-2. A few modifications to the PyTorch source. This is needed before pull request [#60080](https://github.com/pytorch/pytorch/pull/60080) is merged into later version of PyTorch. If you are exporting MobileNetV3 variant, go to your local PyTorch install and override the following method to file `site-packages/torch/onnx/symbolic_opset9.py`. This allows export of `hardswish` as native ops.
+2. (Only for PyTorch <= 1.9) A few modifications to the PyTorch source. This is needed before pull request [#60080](https://github.com/pytorch/pytorch/pull/60080) is merged into later version of PyTorch. If you are exporting MobileNetV3 variant, go to your local PyTorch install and override the following method to file `site-packages/torch/onnx/symbolic_opset9.py`. This allows export of `hardswish` as native ops.
 
 Also note, if your inference backend does not support `hardswish` or `hardsigmoid`. You can also use this hack to replace them with primitive ops.
 
