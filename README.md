@@ -10,6 +10,7 @@ Official repository for the paper [Robust High-Resolution Video Matting with Tem
 
 ## News
 
+* [Nov 03 2021] Fixed a bug in [train.py](https://github.com/PeterL1n/RobustVideoMatting/commit/48effc91576a9e0e7a8519f3da687c0d3522045f).
 * [Sep 16 2021] Code is re-released under GPL-3.0 license.
 * [Aug 25 2021] Source code and pretrained models are published.
 * [Jul 27 2021] Paper is accepted by WACV 2022.

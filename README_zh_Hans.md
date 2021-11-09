@@ -10,6 +10,7 @@
 
 ## 更新
 
+* [2021年11月3日] 修复了 [train.py](https://github.com/PeterL1n/RobustVideoMatting/commit/48effc91576a9e0e7a8519f3da687c0d3522045f) 的 bug。
 * [2021年9月16日] 代码重新以 GPL-3.0 许可发布。
 * [2021年8月25日] 公开代码和模型。
 * [2021年7月27日] 论文被 WACV 2022 收录。
