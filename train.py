@@ -473,7 +473,7 @@ class Trainer:
     def random_crop(self, *imgs):
         h, w = imgs[0].shape[-2:]
         w = random.choice(range(w // 2, w))
-        h = random.choice(range(w // 2, h))
+        h = random.choice(range(h // 2, h))
         results = []
         for img in imgs:
             B, T = img.shape[:2]
