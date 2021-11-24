@@ -1,6 +1,6 @@
+import torch
 from torch import nn
 from torchvision.models.mobilenetv3 import MobileNetV3, InvertedResidualConfig
-from torchvision.models.utils import load_state_dict_from_url
 from torchvision.transforms.functional import normalize
 
 class MobileNetV3LargeEncoder(MobileNetV3):
@@ -27,7 +27,7 @@ class MobileNetV3LargeEncoder(MobileNetV3):
         )
         
         if pretrained:
-            self.load_state_dict(load_state_dict_from_url(
+            self.load_state_dict(torch.hub.load_state_dict_from_url(
                 'https://download.pytorch.org/models/mobilenet_v3_large-8738ca79.pth'))
 
         del self.avgpool
