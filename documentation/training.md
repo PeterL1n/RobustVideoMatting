@@ -21,7 +21,7 @@ The following datasets are used during our training.
     * Only keep samples of humans.
     * Full list of images we used in ImageMatte for training:
         * [imagematte_train.txt](/documentation/misc/imagematte_train.txt)
-        * [imagematte_valid.txt](/documentation/misc/imagematte_train.txt)
+        * [imagematte_valid.txt](/documentation/misc/imagematte_valid.txt)
     * Full list of images we used for evaluation.
         * [aim_test.txt](/documentation/misc/aim_test.txt)
         * [d646_test.txt](/documentation/misc/d646_test.txt)
