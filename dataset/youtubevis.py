@@ -38,7 +38,7 @@ class YouTubeVISDataset(Dataset):
         
         self.index = []
         for video_id in self.videos.keys():
-            for frame in range(len(self.videos[video_id])):
+            for frame in range(len(self.videos[video_id]['file_names'])):
                 self.index.append((video_id, frame))
                 
     def __len__(self):
