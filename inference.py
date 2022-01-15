@@ -20,6 +20,8 @@ from typing import Optional, Tuple
 from tqdm.auto import tqdm
 
 from inference_utils import VideoReader, VideoWriter, ImageSequenceReader, ImageSequenceWriter
+from inference_utils import ImageReader, ConstantImage
+
 
 def convert_video(model,
                   input_source: str,
@@ -27,6 +29,7 @@ def convert_video(model,
                   downsample_ratio: Optional[float] = None,
                   output_type: str = 'video',
                   output_composition: Optional[str] = None,
+                  bgr_source: Optional[str] = None,
                   output_alpha: Optional[str] = None,
                   output_foreground: Optional[str] = None,
                   output_video_mbps: Optional[float] = None,
@@ -46,6 +49,8 @@ def convert_video(model,
             The composition output path. File path if output_type == 'video'. Directory path if output_type == 'png_sequence'.
             If output_type == 'video', the composition has green screen background.
             If output_type == 'png_sequence'. the composition is RGBA png images.
+        bgr_source: A video file, image sequence directory, or an individual image.
+            This is only applicable if you choose output_type == video.
         output_alpha: The alpha output from the model.
         output_foreground: The foreground output from the model.
         seq_chunk: Number of frames to process at once. Increase it for better parallelism.
@@ -110,16 +115,24 @@ def convert_video(model,
         param = next(model.parameters())
         dtype = param.dtype
         device = param.device
-    
+
     if (output_composition is not None) and (output_type == 'video'):
-        bgr = torch.tensor([120, 255, 155], device=device, dtype=dtype).div(255).view(1, 1, 3, 1, 1)
-    
+        if bgr_source is not None and os.path.isfile(bgr_source):
+            if os.path.isfile(bgr_source):
+                if os.path.splitext(bgr_source)[-1].lower() in [".png", ".jpg"]:
+                    bgr_raw = ImageReader(bgr_source, transform=transform)
+                else:
+                    bgr_raw = VideoReader(bgr_source, transform)
+            else:
+                bgr_raw = ImageSequenceReader(bgr_source, transform)
+        else:
+            bgr_raw = ConstantImage(120, 255, 155, device=device, dtype=dtype)
+
     try:
         with torch.no_grad():
             bar = tqdm(total=len(source), disable=not progress, dynamic_ncols=True)
             rec = [None] * 4
-            for src in reader:
-
+            for index, src in enumerate(reader):
                 if downsample_ratio is None:
                     downsample_ratio = auto_downsample_ratio(*src.shape[2:])
 
@@ -132,6 +145,7 @@ def convert_video(model,
                     writer_pha.write(pha[0])
                 if output_composition is not None:
                     if output_type == 'video':
+                        bgr = bgr_raw[index].to(device, dtype, non_blocking=True).unsqueeze(0) # [B, T, C, H, W]
                         com = fgr * pha + bgr * (1 - pha)
                     else:
                         fgr = fgr * pha.gt(0)
