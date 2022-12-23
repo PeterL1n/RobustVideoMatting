@@ -7,6 +7,7 @@
 Official repository for the paper [Robust High-Resolution Video Matting with Temporal Guidance](https://peterl1n.github.io/RobustVideoMatting/). RVM is specifically designed for robust human video matting. Unlike existing neural models that process frames as independent images, RVM uses a recurrent neural network to process videos with temporal memory. RVM can perform matting in real-time on any videos without additional inputs. It achieves **4K 76FPS** and **HD 104FPS** on an Nvidia GTX 1080 Ti GPU. The project was developed at [ByteDance Inc.](https://www.bytedance.com/)
 
 <br>
+<a href="https://replicate.com/arielreplicate/robust_video_matting"><img src="https://replicate.com/arielreplicate/robust_video_matting/badge"></a>
 
 ## News
 
@@ -34,7 +35,7 @@ All footage in the video are available in [Google Drive](https://drive.google.co
 ## Demo
 * [Webcam Demo](https://peterl1n.github.io/RobustVideoMatting/#/demo): Run the model live in your browser. Visualize recurrent states.
 * [Colab Demo](https://colab.research.google.com/drive/10z-pNKRnVNsp0Lq9tH1J_XPZ7CBC_uHm?usp=sharing): Test our model on your own videos with free GPU. 
-
+* [Replicate Demo](https://replicate.com/arielreplicate/robust_video_matting): Test our model on Replicate UI/python API.
 <br>
 
 ## Download
