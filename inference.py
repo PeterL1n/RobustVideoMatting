@@ -34,7 +34,8 @@ def convert_video(model,
                   num_workers: int = 0,
                   progress: bool = True,
                   device: Optional[str] = None,
-                  dtype: Optional[torch.dtype] = None):
+                  dtype: Optional[torch.dtype] = None,                  
+                  background_color: Optional[Tuple[int, int, int]] = (120, 255, 155)):
     
     """
     Args:
@@ -112,7 +113,7 @@ def convert_video(model,
         device = param.device
     
     if (output_composition is not None) and (output_type == 'video'):
-        bgr = torch.tensor([120, 255, 155], device=device, dtype=dtype).div(255).view(1, 1, 3, 1, 1)
+        bgr = torch.tensor(list(background_color), device=device, dtype=dtype).div(255).view(1, 1, 3, 1, 1)
     
     try:
         with torch.no_grad():
