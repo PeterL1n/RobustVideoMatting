@@ -1,0 +1,8 @@
+.idea
+.idea/*
+**/__pycache__
+.env
+gf/gf/weights/*
+gf/weights/*
+app/logs
+!app/logs/.gitignore
