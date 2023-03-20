@@ -1,29 +1,31 @@
 from app.aws_processor import AWSProcessor
 import os
 import platform
-from app.utilities import now, creation_date, logger
+from app.utilities import now, creation_date, logger, send_webhook
+import logging
 from os.path import exists
 import string
 import time
 import random
 from app.bg import removal
+import shutil
+import traceback
+
 
 
 if __name__ == '__main__':
     if platform.system() != 'Windows':
-        os.chdir('/home/ubuntu/lipsync')
+        os.chdir('/home/ubuntu/videomatting')
 
     if not exists('app/logs/{}.log'.format(now(True))):
         with open('app/logs/{}.log'.format(now(True)), 'w') as f:
             f.write(now())
-
     # general config
     letters = string.ascii_lowercase
     aws_client = AWSProcessor()
 
     # check server status for asgs
     if exists('/home/ubuntu/terminate.txt'):
-
         time_now = time.time()
         created_termination = creation_date('/home/ubuntu/terminate.txt')
         minutes_pass = (time_now - created_termination) / 60
@@ -32,13 +34,18 @@ if __name__ == '__main__':
         else:
             time.sleep(120)
             exit(0)
-
     process_name = ''.join(random.choice(letters) for i in range(10))
     process_name = "{}.txt".format(process_name)
 
     # read sqs
     try:
-        sqs, handler = aws_client.get_sqs(process_name)
+        # sqs, handler = aws_client.get_sqs(process_name)
+
+        sqs = {
+            'uid': 'sdasda',
+            'video': 'https://mltts.s3.amazonaws.com/tmp/test.mp4'
+        }
+
 
         if not sqs:
             # todo check if there is a need of a balancer
@@ -56,14 +63,43 @@ if __name__ == '__main__':
 
         # download video
         video = aws_client.download_video(sqs['video'], uid)
+        print(video)
+        exit(0)
         logger(uid).info('downloaded video into: files/{}/video.mp4'.format(uid))
 
         # bg_removal
+        local_file = removal(uid)
+
+        # upload final video
+        logger(uid).info('uploading final video ')
+        final_video_url = aws_client.uplaod_final_video(uid)
+
+
+        # webhook
+        send_webhook(data={'source': final_video_url, 'uuid': uid})
+
+        # delete sqs
+        # aws_client.delete_sqs_message(handler)
+
+        # upload logs
+        aws_client.upload_logs(uid=uid)
+
+        # clear data
+        handlers = logging.getLogger(uid).handlers[:]
+        for handler in handlers:
+            handler.close()
+        os.remove("logs/{}.log".format(uid))
+
+        # remove files
+        shutil.rmtree('app/files/{}'.format(uid))
+        shutil.rmtree('temp/{}'.format(uid))
+
 
     except Exception as E:
+        print(E)
+        print(traceback.format_exc())
         pass
 
-    # bg_removal
-    # upload video
+
     # send sqs
     # clear temporary data

@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import requests
 from dotenv import load_dotenv
-from settings import WEBHOOK_CONFIG, SHUTDOWN_TIMINGS, SERVER
+from app.settings import WEBHOOK_CONFIG, SHUTDOWN_TIMINGS, SERVER
 import glob
 import time
 import platform
@@ -34,10 +34,10 @@ def logger(file=None):
     file_name = file
     if file is None:
         daily_log = "{}.log".format(now(True))
-        file = "logs/{}".format(daily_log)
+        file = "app/logs/{}".format(daily_log)
         level = 'DEBUG'
     else:
-        file = "logs/{}.log".format(file)
+        file = "app/logs/{}.log".format(file)
         level = 'INFO'
 
     log_format = logging.Formatter("%(levelname)s %(asctime)s - %(message)s")

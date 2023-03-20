@@ -2,6 +2,7 @@ import torch
 from model import MattingNetwork
 from inference import convert_video
 from app.utilities import generate_final_video, generate_video_path
+from app.settings import VIDEO_CONFIG
 
 
 def removal(uid):
@@ -20,5 +21,8 @@ def removal(uid):
         # output_foreground="fgr.mp4",  # [Optional] Output the raw foreground prediction.
         output_video_mbps=4,  # Output video mbps. Not needed for png sequence.
         downsample_ratio=None,  # A hyperparameter to adjust or use None for auto.
-        seq_chunk=12,  # Process n frames at once for better parallelism.
+        seq_chunk=VIDEO_CONFIG['seq_chunk'],  # Process n frames at once for better parallelism.
     )
+
+    return final_video
+

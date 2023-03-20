@@ -1,9 +1,9 @@
 import json
 import boto3
 from typing import Union, Tuple, Any
-from settings import AWS_CONFIG
+from app.settings import AWS_CONFIG
 import os
-from utilities import now, generate_audio_path, generate_s3_media_arn, generate_video_path, generate_final_video, generate_s3_video_arn
+from app.utilities import now, generate_video_path, generate_final_video, generate_s3_video_arn
 from botocore.exceptions import ClientError
 import requests
 import time
@@ -60,28 +60,28 @@ class AWSProcessor:
         Returns:
             Union[dict, bool]:
         """
-        balancer = Balancer('lipsync')
-        if balancer.is_main():
-            balancer.create_blocker(process_name)
-        elif balancer.main_running():
-            time.sleep(30)
-            return False, False
-        elif not balancer.can_run():
-            time.sleep(30)
-            return False, False
+        # balancer = Balancer('lipsync')
+        # if balancer.is_main():
+        #     balancer.create_blocker(process_name)
+        # elif balancer.main_running():
+        #     time.sleep(30)
+        #     return False, False
+        # elif not balancer.can_run():
+        #     time.sleep(30)
+        #     return False, False
 
         response = self.sqs_client.receive_message(QueueUrl=self.sqs_url, MaxNumberOfMessages=1, WaitTimeSeconds=2)
 
         for message in response.get('Messages', []):
             message_body = message['Body']
             sqs_message_handler = message['ReceiptHandle']
-            while not balancer.can_run():
-                time.sleep(10)
-                continue
+            # while not balancer.can_run():
+            #     time.sleep(10)
+            #     continue
 
             return json.loads(message_body), sqs_message_handler
 
-        balancer.remove_process(process_name)
+        # balancer.remove_process(process_name)
         return '', ''
 
     def generate_full_url(self, arn):
