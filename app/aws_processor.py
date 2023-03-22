@@ -3,7 +3,7 @@ import boto3
 from typing import Union, Tuple, Any
 from app.settings import AWS_CONFIG
 import os
-from app.utilities import now, generate_video_path, generate_final_video, generate_s3_video_arn
+from app.utilities import now, generate_video_path, generate_final_video, generate_s3_video_arn, generate_s3_media_arn
 from botocore.exceptions import ClientError
 import requests
 import time
@@ -27,22 +27,21 @@ class AWSProcessor:
         return self.s3_client
 
     def upload_logs(self, uid=None):
-        log_general = "logs/{}.log".format(now(True))
+        log_general = "app/logs/{}.log".format(now(True))
         job_log = False
         if uid is not None:
-            job_log = "logs/{}.log".format(uid)
+            job_log = "app/logs/{}.log".format(uid)
         try:
-            self.s3_client.upload_file(log_general, self.bucket, "logs/lip-sync-logs/{}".format(os.path.basename(log_general)))
+            self.s3_client.upload_file(log_general, self.bucket, "logs/bg-removal/{}".format(os.path.basename(log_general)))
             if uid is not None and job_log:
-                self.s3_client.upload_file(job_log, self.bucket, "logs/lip-sync-logs/{}".format(os.path.basename(job_log)))
+                self.s3_client.upload_file(job_log, self.bucket, "logs/bg-removal/{}".format(os.path.basename(job_log)))
         except ClientError as E:
             raise Exception(E)
 
-    def uplaod_final_video(self, uid):
-        final_video_local = generate_final_video(uid)
+    def uplaod_final_video(self, uid, final_video_local):
         try:
             _, extension = os.path.splitext(final_video_local)
-            self.s3_client.upload_file(final_video_local, self.bucket, "tmp-lip-sync-avatar/{}{}".format(uid, extension), ExtraArgs={'ACL': 'public-read'})
+            self.s3_client.upload_file(final_video_local, self.bucket, "tmp/{}{}".format(uid, extension), ExtraArgs={'ACL': 'public-read'})
             return "https://{}.s3.amazonaws.com/tmp-lip-sync-avatar/{}{}".format(self.bucket, uid, extension)
         except ClientError as E:
             raise Exception(E)
@@ -56,7 +55,7 @@ class AWSProcessor:
 
     def get_sqs(self, process_name) -> Union[Tuple[Any, Any], bool]:
         """
-        This method is responsible for reading AWS SQS queues through aws_processor
+        This method is responsible for reading AWS SQS queues through aws_process   or
         Returns:
             Union[dict, bool]:
         """
@@ -88,13 +87,15 @@ class AWSProcessor:
         return "https://{}.s3.amazonaws.com/tts/{}.wav".format(self.bucket, arn)
 
     def download_video(self, video, uid):
-        video_local = generate_video_path(uid)
-        arn = generate_s3_video_arn(video)
+        bucket, arn = generate_s3_media_arn(video)
+        _, extension = os.path.splitext(video)
+        video_local = generate_video_path(uid, extension)
+
         try:
-            self.s3_client.download_file(self.bucket, arn, video_local)
+            self.s3_client.download_file(bucket, arn, video_local)
         except Exception as E:
             print(E)
-        return video_local
+        return video_local, extension
 
     def file_exists(self, arn):
         try:

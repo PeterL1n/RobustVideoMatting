@@ -78,12 +78,12 @@ def generate_s3_video_arn(avatar_id):
     return 'avatars/{}.mp4'.format(avatar_id)
 
 
-def generate_video_path(uid):
-    return "app/files/{}/video.mp4".format(uid)
+def generate_video_path(uid, extension):
+    return "app/files/{}/video{}".format(uid, extension)
 
 
-def generate_final_video(uid):
-    return 'app/files/{}/final.mp4'.format(uid)
+def generate_final_video(uid, extension):
+    return 'app/files/{}/final{}'.format(uid, extension)
 
 
 def shutdown():

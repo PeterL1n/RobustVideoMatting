@@ -5,13 +5,15 @@ from app.utilities import generate_final_video, generate_video_path
 from app.settings import VIDEO_CONFIG
 
 
-def removal(uid):
+def removal(uid, extension):
     model = MattingNetwork('mobilenetv3').eval().cuda()  # or "resnet50"
     model.load_state_dict(torch.load('rvm_mobilenetv3.pth'))
 
-    video_local = generate_video_path(uid)
-    final_video = generate_final_video(uid)
+    video_local = generate_video_path(uid, extension)
+    final_video = generate_final_video(uid, extension)
 
+    # print(VIDEO_CONFIG)
+    # exit(0)
     convert_video(
         model,  # The model, can be on any device (cpu or cuda).
         input_source=video_local,  # A video file or an image sequence directory.
@@ -21,7 +23,7 @@ def removal(uid):
         # output_foreground="fgr.mp4",  # [Optional] Output the raw foreground prediction.
         output_video_mbps=4,  # Output video mbps. Not needed for png sequence.
         downsample_ratio=None,  # A hyperparameter to adjust or use None for auto.
-        seq_chunk=VIDEO_CONFIG['seq_chunk'],  # Process n frames at once for better parallelism.
+        seq_chunk=int(VIDEO_CONFIG['seq_chunk']),  # Process n frames at once for better parallelism.
     )
 
     return final_video

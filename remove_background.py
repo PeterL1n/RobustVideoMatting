@@ -12,7 +12,6 @@ import shutil
 import traceback
 
 
-
 if __name__ == '__main__':
     if platform.system() != 'Windows':
         os.chdir('/home/ubuntu/videomatting')
@@ -34,6 +33,7 @@ if __name__ == '__main__':
         else:
             time.sleep(120)
             exit(0)
+
     process_name = ''.join(random.choice(letters) for i in range(10))
     process_name = "{}.txt".format(process_name)
 
@@ -46,10 +46,9 @@ if __name__ == '__main__':
             'video': 'https://mltts.s3.amazonaws.com/tmp/test.mp4'
         }
 
-
         if not sqs:
-            # todo check if there is a need of a balancer
-
+            # todo check if there is
+            #  a need of a balancer
             time.sleep(10)
             exit(0)
 
@@ -62,21 +61,19 @@ if __name__ == '__main__':
         logger(uid).info('created folder: files/{}'.format(uid))
 
         # download video
-        video = aws_client.download_video(sqs['video'], uid)
-        print(video)
-        exit(0)
+        video, extension = aws_client.download_video(sqs['video'], uid)
         logger(uid).info('downloaded video into: files/{}/video.mp4'.format(uid))
 
         # bg_removal
-        local_file = removal(uid)
+        local_file = removal(uid, extension=extension)
 
         # upload final video
         logger(uid).info('uploading final video ')
-        final_video_url = aws_client.uplaod_final_video(uid)
-
+        final_video_url = aws_client.uplaod_final_video(uid, local_file)
+        print(final_video_url)
 
         # webhook
-        send_webhook(data={'source': final_video_url, 'uuid': uid})
+        send_webhook(data={'video': final_video_url, 'uid': uid})
 
         # delete sqs
         # aws_client.delete_sqs_message(handler)
@@ -88,11 +85,12 @@ if __name__ == '__main__':
         handlers = logging.getLogger(uid).handlers[:]
         for handler in handlers:
             handler.close()
-        os.remove("logs/{}.log".format(uid))
+        os.remove("app/logs/{}.log".format(uid))
 
         # remove files
-        shutil.rmtree('app/files/{}'.format(uid))
-        shutil.rmtree('temp/{}'.format(uid))
+        # shutil.rmtree('app/files/{}'.format(uid))
+        # shutil.rmtree('temp/{}'.format(uid))
+
 
 
     except Exception as E:
