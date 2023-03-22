@@ -6,3 +6,5 @@ gf/gf/weights/*
 gf/weights/*
 app/logs
 !app/logs/.gitignore
+app/files
+!app/files/.gitignore
