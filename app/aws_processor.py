@@ -82,7 +82,7 @@ class AWSProcessor:
             return json.loads(message_body), sqs_message_handler
 
         # balancer.remove_process(process_name)
-        return '', ''
+        return False, False
 
     def generate_full_url(self, arn):
         return "https://{}.s3.amazonaws.com/tts/{}.wav".format(self.bucket, arn)
