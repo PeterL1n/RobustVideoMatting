@@ -16,7 +16,8 @@ AWS_CONFIG = {
     'bucket': os.getenv('AWS_BUCKET'),
     'region': os.getenv('AWS_REGION'),
     'sqs': os.getenv('AWS_SQS_URL'),
-    'sqs_handler': 'handler.json'
+    'sqs_handler': 'handler.json',
+    'final_upload_bucket': os.getenv('UPLOAD_BUCKET')
 }
 
 SERVER = {

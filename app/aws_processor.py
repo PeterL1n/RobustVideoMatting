@@ -19,6 +19,7 @@ class AWSProcessor:
 
         self.bucket = AWS_CONFIG['bucket']
         self.sqs_url = AWS_CONFIG['sqs']
+        self.upload_bucket = AWS_CONFIG['final_upload_bucket']
 
     def get_sqs_client(self):
         return self.sqs_client
@@ -41,8 +42,8 @@ class AWSProcessor:
     def uplaod_final_video(self, uid, final_video_local):
         try:
             _, extension = os.path.splitext(final_video_local)
-            self.s3_client.upload_file(final_video_local, self.bucket, "tmp/{}{}".format(uid, extension), ExtraArgs={'ACL': 'public-read'})
-            return "https://{}.s3.amazonaws.com/tmp-lip-sync-avatar/{}{}".format(self.bucket, uid, extension)
+            self.s3_client.upload_file(final_video_local, self.upload_bucket, "avatars/users/{}{}".format(uid, extension), ExtraArgs={'ACL': 'public-read'})
+            return "https://{}.s3.amazonaws.com/avatars/users/{}{}".format(self.upload_bucket, uid, extension)
         except ClientError as E:
             raise Exception(E)
 
