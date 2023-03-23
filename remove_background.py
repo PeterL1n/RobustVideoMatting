@@ -1,7 +1,7 @@
 from app.aws_processor import AWSProcessor
 import os
 import platform
-from app.utilities import now, creation_date, logger, send_webhook
+from app.utilities import now, creation_date, logger, send_webhook, shutdown_single_proccess
 import logging
 from os.path import exists
 import string
@@ -31,7 +31,7 @@ if __name__ == '__main__':
         if minutes_pass > 15:
             os.remove('/home/ubuntu/terminate.txt')
         else:
-            time.sleep(120)
+            time.sleep(20)
             exit(0)
 
     process_name = ''.join(random.choice(letters) for i in range(10))
@@ -39,14 +39,15 @@ if __name__ == '__main__':
 
     # read sqs
     try:
-        # sqs, handler = aws_client.get_sqs(process_name)
-
-        sqs = {
-            'uid': 'sdasda',
-            'video': 'https://mltts.s3.amazonaws.com/tmp/test.mp4'
-        }
+        sqs, handler = aws_client.get_sqs(process_name)
+        #
+        # sqs = {
+        #     'uid': 'sdasda',
+        #     'video': 'https://mltts.s3.amazonaws.com/tmp/test.mp4'
+        # }
 
         if not sqs:
+            shutdown_single_proccess()
             # todo check if there is
             #  a need of a balancer
             time.sleep(10)
@@ -76,7 +77,7 @@ if __name__ == '__main__':
         send_webhook(data={'video': final_video_url, 'uid': uid})
 
         # delete sqs
-        # aws_client.delete_sqs_message(handler)
+        aws_client.delete_sqs_message(handler)
 
         # upload logs
         aws_client.upload_logs(uid=uid)
@@ -88,8 +89,9 @@ if __name__ == '__main__':
         os.remove("app/logs/{}.log".format(uid))
 
         # remove files
-        # shutil.rmtree('app/files/{}'.format(uid))
-        # shutil.rmtree('temp/{}'.format(uid))
+        time.sleep(10)
+        shutil.rmtree('app/files/{}'.format(uid))
+        shutil.rmtree('temp/{}'.format(uid))
 
 
 
@@ -97,7 +99,3 @@ if __name__ == '__main__':
         print(E)
         print(traceback.format_exc())
         pass
-
-
-    # send sqs
-    # clear temporary data

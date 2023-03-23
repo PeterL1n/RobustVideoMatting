@@ -86,6 +86,26 @@ def generate_final_video(uid, extension):
     return 'app/files/{}/final{}'.format(uid, extension)
 
 
+def shutdown_single_proccess():
+    instance_id = os.popen('wget -q -O - http://169.254.169.254/latest/meta-data/instance-id').read()
+
+    if instance_id == SERVER['main_id']:
+        return False
+
+    if not check_runtime():
+        return False
+
+    if not other_servers_are_running():
+        return False
+
+    with open('/home/ubuntu/terminate.txt', 'w') as f:
+        f.write(now())
+
+    terminate_command = "aws autoscaling terminate-instance-in-auto-scaling-group --instance-id {} --should-decrement-desired-capacity 2>&1".format(
+        instance_id)
+    os.system(terminate_command)
+
+
 def shutdown():
     instance_id = os.popen('wget -q -O - http://169.254.169.254/latest/meta-data/instance-id').read()
     if instance_id == SERVER['main_id']:
@@ -105,6 +125,24 @@ def shutdown():
         os.system(terminate_command)
 
 
+def other_servers_are_running():
+    import json
+
+    command = 'aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ASG-ML-BACKGROUND-REMOVAL'
+    output = os.popen(command).read()
+    asg_info = json.loads(output)
+
+    min_size = asg_info['AutoScalingGroups'][0]['MinSize']
+    if min_size == 0:
+        return True
+
+    instances_info = asg_info['AutoScalingGroups'][0]['Instances']
+    if len(instances_info) <= min_size:
+        return False
+
+    return True
+
+
 def check_runtime():
     time_info = os.popen('who -b').read()
     time = int(time_info.split(':')[-1])
@@ -116,6 +154,7 @@ def check_runtime():
         return True
 
     return False
+
 
 def check_all_processes_statuses():
     from settings import BALANCER_SERVER_TYPES
@@ -132,6 +171,7 @@ def check_all_processes_statuses():
                     return False
 
     return True
+
 
 def creation_date(file):
     if platform.system() == 'Windows':
