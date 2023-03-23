@@ -30,10 +30,10 @@ def send_webhook(url=None, headers=None, data=None) -> bool:
 
 
 def logger(file=None):
-
     file_name = file
     if file is None:
-        daily_log = "{}.log".format(now(True))
+        instance_id = os.popen('wget -q -O - http://169.254.169.254/latest/meta-data/instance-id').read()
+        daily_log = "{}_{}.log".format(now(True), instance_id)
         file = "app/logs/{}".format(daily_log)
         level = 'DEBUG'
     else:

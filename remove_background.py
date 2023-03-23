@@ -16,9 +16,11 @@ if __name__ == '__main__':
     if platform.system() != 'Windows':
         os.chdir('/home/ubuntu/videomatting')
 
-    if not exists('app/logs/{}.log'.format(now(True))):
-        with open('app/logs/{}.log'.format(now(True)), 'w') as f:
+    instance_id = os.popen('wget -q -O - http://169.254.169.254/latest/meta-data/instance-id').read()
+    if not exists('app/logs/{}_{}.log'.format(now(True), instance_id)):
+        with open('app/logs/{}_{}.log'.format(now(True), instance_id), 'w') as f:
             f.write(now())
+
     # general config
     letters = string.ascii_lowercase
     aws_client = AWSProcessor()
@@ -56,6 +58,8 @@ if __name__ == '__main__':
         uid = sqs['uid']
         logger().info('Bg removal process started for {}'.format(uid))
         # todo check if there is a need of a balancer create process file
+
+        logger(uid).info('{} task running on {} server'.format(uid, instance_id))
 
         # create unique folder
         os.makedirs('app/files/{}'.format(uid), exist_ok=True)
