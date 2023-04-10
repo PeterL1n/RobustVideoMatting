@@ -5,3 +5,4 @@ tqdm==4.61.1
 pims==0.5
 boto3
 python-dotenv
+opencv-python

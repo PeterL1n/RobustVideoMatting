@@ -1,7 +1,7 @@
 from app.aws_processor import AWSProcessor
 import os
 import platform
-from app.utilities import now, creation_date, logger, send_webhook, shutdown_single_proccess
+from app.utilities import now, creation_date, logger, send_webhook, shutdown_single_proccess, video_dimension_unifier
 import logging
 from os.path import exists
 import string
@@ -69,13 +69,16 @@ if __name__ == '__main__':
         video, extension = aws_client.download_video(sqs['video'], uid)
         logger(uid).info('downloaded video into: files/{}/video.mp4'.format(uid))
 
+        # video dimension modifier
+        video = video_dimension_unifier(video, uid, extension)
+
         # bg_removal
-        local_file = removal(uid, extension=extension)
+        local_file = removal(uid, extension=extension, video_local=video)
 
         # upload final video
         logger(uid).info('uploading final video ')
         final_video_url = aws_client.uplaod_final_video(uid, local_file)
-        print(final_video_url)
+        # print(final_video_url)
 
         # webhook
         send_webhook(data={'video': final_video_url, 'uid': uid})
@@ -96,8 +99,6 @@ if __name__ == '__main__':
         time.sleep(10)
         shutil.rmtree('app/files/{}'.format(uid))
         shutil.rmtree('temp/{}'.format(uid))
-
-
 
     except Exception as E:
         print(E)

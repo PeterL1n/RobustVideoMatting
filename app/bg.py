@@ -5,15 +5,12 @@ from app.utilities import generate_final_video, generate_video_path
 from app.settings import VIDEO_CONFIG
 
 
-def removal(uid, extension):
+def removal(uid, extension, video_local):
     model = MattingNetwork('mobilenetv3').eval().cuda()  # or "resnet50"
     model.load_state_dict(torch.load('rvm_mobilenetv3.pth'))
 
-    video_local = generate_video_path(uid, extension)
     final_video = generate_final_video(uid, extension)
 
-    # print(VIDEO_CONFIG)
-    # exit(0)
     convert_video(
         model,  # The model, can be on any device (cpu or cuda).
         input_source=video_local,  # A video file or an image sequence directory.

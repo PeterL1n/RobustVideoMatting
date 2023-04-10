@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from datetime import datetime
@@ -183,6 +184,7 @@ def creation_date(file):
         except AttributeError:
             return stat.st_mtime
 
+
 def check_processess():
     import time
     time_now = time.time()
@@ -196,3 +198,21 @@ def check_processess():
             return False
 
     return True
+
+
+def video_dimension_unifier(video, uid, extension):
+    import cv2
+    video_dimensions = os.popen('ffprobe -v error -select_streams v -show_entries stream=width,height -of json {}'.format(video)).read()
+    video_width, video_height, _ = json.loads(video_dimensions)['streams'][0].values()
+
+    first_frame_path = "app/files/{}/first_frame.jpg".format(uid)
+    os.system('ffmpeg -i {} -y -vf "select=eq(n\,0)" -q:v 3 {}'.format(video, first_frame_path))
+    first_frame_dimensions = cv2.imread(first_frame_path)
+    frame_h, frame_w, _ = first_frame_dimensions.shape
+
+    if video_width != frame_w or video_height != frame_h:
+        video_new_dimensions = "app/files/{}/video_n_dim{}".format(uid, extension)
+        os.system('ffmpeg -i {} -y -vf scale={}:{} {}'.format(video, frame_w, frame_h, video_new_dimensions))
+        return video_new_dimensions
+
+    return video
