@@ -98,7 +98,6 @@ if __name__ == '__main__':
         # remove files
         time.sleep(10)
         shutil.rmtree('app/files/{}'.format(uid))
-        shutil.rmtree('temp/{}'.format(uid))
 
     except Exception as E:
         print(E)
