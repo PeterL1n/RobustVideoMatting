@@ -87,7 +87,7 @@ if __name__ == '__main__':
         aws_client.delete_sqs_message(handler)
 
         # upload logs
-        aws_client.upload_logs(uid=uid)
+        aws_client.upload_logs(uid=uid, instance_id=instance_id)
 
         # clear data
         handlers = logging.getLogger(uid).handlers[:]

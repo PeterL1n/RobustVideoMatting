@@ -27,8 +27,8 @@ class AWSProcessor:
     def get_s3_client(self):
         return self.s3_client
 
-    def upload_logs(self, uid=None):
-        log_general = "app/logs/{}.log".format(now(True))
+    def upload_logs(self, uid=None, instance_id=None):
+        log_general = 'app/logs/{}_{}.log'.format(now(True), instance_id)
         job_log = False
         if uid is not None:
             job_log = "app/logs/{}.log".format(uid)
