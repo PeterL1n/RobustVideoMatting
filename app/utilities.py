@@ -203,7 +203,7 @@ def check_processess():
 def video_dimension_unifier(video, uid, extension):
     import cv2
     video_dimensions = os.popen('ffprobe -v error -select_streams v -show_entries stream=width,height -of json {}'.format(video)).read()
-    video_width, video_height, _ = json.loads(video_dimensions)['streams'][0].values()
+    video_width, video_height, *_ = json.loads(video_dimensions)['streams'][0].values()
 
     first_frame_path = "app/files/{}/first_frame.jpg".format(uid)
     os.system('ffmpeg -i {} -y -vf "select=eq(n\,0)" -q:v 3 {}'.format(video, first_frame_path))
