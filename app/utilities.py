@@ -215,4 +215,5 @@ def video_dimension_unifier(video, uid, extension):
         os.system('ffmpeg -i {} -y -vf scale={}:{} {}'.format(video, frame_w, frame_h, video_new_dimensions))
         return video_new_dimensions
 
-    return video
+    video_dimension_factor = frame_h * frame_w / (1920 * 1080)
+    return video, video_dimension_factor

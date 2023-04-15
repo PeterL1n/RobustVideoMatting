@@ -10,6 +10,7 @@ import random
 from app.bg import removal
 import shutil
 import traceback
+from app.settings import VIDEO_CONFIG
 
 
 if __name__ == '__main__':
@@ -70,10 +71,12 @@ if __name__ == '__main__':
         logger(uid).info('downloaded video into: files/{}/video.mp4'.format(uid))
 
         # video dimension modifier
-        video = video_dimension_unifier(video, uid, extension)
+        video, video_dimension_factor = video_dimension_unifier(video, uid, extension)
+
+        seq_chunk = int(int(VIDEO_CONFIG['seq_chunk']) / video_dimension_factor)
 
         # bg_removal
-        local_file = removal(uid, extension=extension, video_local=video)
+        local_file = removal(uid, extension=extension, video_local=video, seq_chunk=seq_chunk)
 
         # upload final video
         logger(uid).info('uploading final video ')
