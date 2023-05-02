@@ -216,4 +216,5 @@ def video_dimension_unifier(video, uid, extension):
         return video_new_dimensions
 
     video_dimension_factor = frame_h * frame_w / (1920 * 1080)
+    video_dimension_factor = 1 if video_dimension_factor < 1 else video_dimension_factor
     return video, video_dimension_factor
