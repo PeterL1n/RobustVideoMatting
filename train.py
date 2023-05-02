@@ -403,7 +403,7 @@ class Trainer:
         true_seg = true_seg.to(self.rank, non_blocking=True)
         
         true_img, true_seg = self.random_crop(true_img, true_seg)
-        
+
         with autocast(enabled=not self.args.disable_mixed_precision):
             pred_seg = self.model_ddp(true_img, segmentation_pass=True)[0]
             loss = segmentation_loss(pred_seg, true_seg)
