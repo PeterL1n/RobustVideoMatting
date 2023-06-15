@@ -17,7 +17,7 @@ from model import MattingNetwork
 def mobilenetv3(pretrained: bool = True, progress: bool = True):
     model = MattingNetwork('mobilenetv3')
     if pretrained:
-        url = 'https://github.com/PeterL1n/RobustVideoMatting/releases/download/v1.0.0/rvm_mobilenetv3.pth'
+        url = 'https://github.com/DongMaicle/RobustVideoMatting/releases/download/v1.0.0/rvm_mobilenetv3.pth'
         model.load_state_dict(torch.hub.load_state_dict_from_url(url, map_location='cpu', progress=progress))
     return model
 
@@ -25,7 +25,7 @@ def mobilenetv3(pretrained: bool = True, progress: bool = True):
 def resnet50(pretrained: bool = True, progress: bool = True):
     model = MattingNetwork('resnet50')
     if pretrained:
-        url = 'https://github.com/PeterL1n/RobustVideoMatting/releases/download/v1.0.0/rvm_resnet50.pth'
+        url = 'https://github.com/DongMaicle/RobustVideoMatting/releases/download/v1.0.0/rvm_resnet50.pth'
         model.load_state_dict(torch.hub.load_state_dict_from_url(url, map_location='cpu', progress=progress))
     return model
 
