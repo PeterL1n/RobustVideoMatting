@@ -54,7 +54,7 @@ class Exporter:
     
     def register_custom_ops(self):
         @register_torch_op(override=True)
-        def hardswish_(context, node):
+        def hardswish(context, node):
             inputs = _get_inputs(context, node, expected=1)
             x = inputs[0]
             y = mb.sigmoid_hard(x=inputs[0], alpha=1.0/6, beta=0.5)
@@ -62,7 +62,7 @@ class Exporter:
             context.add(z)
 
         @register_torch_op(override=True)
-        def hardsigmoid_(context, node):
+        def hardsigmoid(context, node):
             inputs = _get_inputs(context, node, expected=1)
             res = mb.sigmoid_hard(x=inputs[0], alpha=1.0/6, beta=0.5, name=node.name)
             context.add(res)
