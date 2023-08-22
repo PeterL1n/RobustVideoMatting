@@ -1,6 +1,6 @@
 from torch import nn
 from torchvision.models.resnet import ResNet, Bottleneck
-from torchvision.models.utils import load_state_dict_from_url
+from torch.hub import load_state_dict_from_url
 
 class ResNet50Encoder(ResNet):
     def __init__(self, pretrained: bool = False):
