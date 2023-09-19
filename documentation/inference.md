@@ -121,6 +121,7 @@ with torch.no_grad():
     for src in DataLoader(reader):
         fgr, pha, *rec = model(src.cuda(), *rec, downsample_ratio=0.25)  # Cycle the recurrent states.
         writer.write(fgr * pha + bgr * (1 - pha))
+    writer.close()
 ```
 
 Or you can use the provided video converter:
