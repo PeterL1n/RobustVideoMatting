@@ -1,6 +1,7 @@
 import torch
 from torch import Tensor
 from torch import nn
+from torchsummary import summary
 from torch.nn import functional as F
 from typing import Optional, List
 
@@ -58,8 +59,8 @@ class MattingNetwork(nn.Module):
         if not segmentation_pass:
             fgr_residual, pha = self.project_mat(hid).split([3, 1], dim=-3)
             if downsample_ratio != 1:
-                fgr_residual, pha = self.refiner(src, src_sm, fgr_residual, pha, hid)
-            fgr = fgr_residual + src
+                fgr_residual, pha = self.refiner(src[:, :, :3, ...], src_sm[:, :, :3, ...], fgr_residual, pha, hid)
+            fgr = fgr_residual + src[:, :, :3, ...]
             fgr = fgr.clamp(0., 1.)
             pha = pha.clamp(0., 1.)
             return [fgr, pha, *rec]
