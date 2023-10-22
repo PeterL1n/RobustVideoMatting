@@ -1,7 +1,7 @@
 import torch
 from torch import Tensor
 from torch import nn
-from torch.nn import functional as F
+# from torch.nn import functional as F
 from typing import Tuple, Optional
 
 class RecurrentDecoder(nn.Module):
@@ -9,10 +9,10 @@ class RecurrentDecoder(nn.Module):
         super().__init__()
         self.avgpool = AvgPool()
         self.decode4 = BottleneckBlock(feature_channels[3])
-        self.decode3 = UpsamplingBlock(feature_channels[3], feature_channels[2], 3, decoder_channels[0])
-        self.decode2 = UpsamplingBlock(decoder_channels[0], feature_channels[1], 3, decoder_channels[1])
-        self.decode1 = UpsamplingBlock(decoder_channels[1], feature_channels[0], 3, decoder_channels[2])
-        self.decode0 = OutputBlock(decoder_channels[2], 3, decoder_channels[3])
+        self.decode3 = UpsamplingBlock(feature_channels[3], feature_channels[2], 6, decoder_channels[0])
+        self.decode2 = UpsamplingBlock(decoder_channels[0], feature_channels[1], 6, decoder_channels[1])
+        self.decode1 = UpsamplingBlock(decoder_channels[1], feature_channels[0], 6, decoder_channels[2])
+        self.decode0 = OutputBlock(decoder_channels[2], 6, decoder_channels[3])
 
     def forward(self,
                 s0: Tensor, f1: Tensor, f2: Tensor, f3: Tensor, f4: Tensor,

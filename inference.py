@@ -120,6 +120,10 @@ def convert_video(model,
             rec = [None] * 4
             for src in reader:
 
+                if src.shape[-1] %2 == 1:
+                    src = src[:, :, :, :-1]
+                if src.shape[-2] %2 == 1:
+                    src = src[:, :, :-1, :]
                 if downsample_ratio is None:
                     downsample_ratio = auto_downsample_ratio(*src.shape[2:])
 

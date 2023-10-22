@@ -5,7 +5,7 @@ import numpy as np
 from torch.utils.data import Dataset
 from torchvision.transforms.functional import to_pil_image
 from PIL import Image
-
+import torch
 
 class VideoReader(Dataset):
     def __init__(self, path, transform=None):
@@ -55,18 +55,23 @@ class VideoWriter:
 class ImageSequenceReader(Dataset):
     def __init__(self, path, transform=None):
         self.path = path
-        self.files = sorted(os.listdir(path))
+        self.files_fgr = sorted(os.listdir(path + "fgr/"))
+        self.files_bgr = sorted(os.listdir(path + "bgr/"))
         self.transform = transform
         
     def __len__(self):
-        return len(self.files)
+        return len(self.files_fgr)
     
     def __getitem__(self, idx):
-        with Image.open(os.path.join(self.path, self.files[idx])) as img:
-            img.load()
+        with Image.open(os.path.join(self.path + "fgr/", self.files_fgr[idx])) as fgr_img:
+            fgr_img.load()
+
+        with Image.open(os.path.join(self.path + "bgr/", self.files_bgr[idx])) as bgr_img:
+            bgr_img.load()
+        
         if self.transform is not None:
-            return self.transform(img)
-        return img
+            return torch.cat([self.transform(fgr_img), self.transform(bgr_img)], dim = 0)
+        return fgr_img
 
 
 class ImageSequenceWriter:

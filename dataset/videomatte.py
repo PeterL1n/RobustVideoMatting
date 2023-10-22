@@ -9,14 +9,14 @@ from .augmentation import MotionAugmentation
 class VideoMatteDataset(Dataset):
     def __init__(self,
                  videomatte_dir,
-                 background_image_dir,
+                #  background_image_dir,
                  background_video_dir,
                  size,
                  seq_length,
                  seq_sampler,
                  transform=None):
-        self.background_image_dir = background_image_dir
-        self.background_image_files = os.listdir(background_image_dir)
+        # self.background_image_dir = background_image_dir
+        # self.background_image_files = os.listdir(background_image_dir)
         self.background_video_dir = background_video_dir
         self.background_video_clips = sorted(os.listdir(background_video_dir))
         self.background_video_frames = [sorted(os.listdir(os.path.join(background_video_dir, clip)))
@@ -38,10 +38,10 @@ class VideoMatteDataset(Dataset):
         return len(self.videomatte_idx)
     
     def __getitem__(self, idx):
-        if random.random() < 0.5:
-            bgrs = self._get_random_image_background()
-        else:
-            bgrs = self._get_random_video_background()
+        # if random.random() < 0.5:
+        #     bgrs = self._get_random_image_background()
+        # else:
+        bgrs = self._get_random_video_background()
         
         fgrs, phas = self._get_videomatte(idx)
         
@@ -50,11 +50,11 @@ class VideoMatteDataset(Dataset):
         
         return fgrs, phas, bgrs
     
-    def _get_random_image_background(self):
-        with Image.open(os.path.join(self.background_image_dir, random.choice(self.background_image_files))) as bgr:
-            bgr = self._downsample_if_needed(bgr.convert('RGB'))
-        bgrs = [bgr] * self.seq_length
-        return bgrs
+    # def _get_random_image_background(self):
+    #     with Image.open(os.path.join(self.background_image_dir, random.choice(self.background_image_files))) as bgr:
+    #         bgr = self._downsample_if_needed(bgr.convert('RGB'))
+    #     bgrs = [bgr] * self.seq_length
+    #     return bgrs
     
     def _get_random_video_background(self):
         clip_idx = random.choice(range(len(self.background_video_clips)))
