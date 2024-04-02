@@ -1,4 +1,4 @@
-# Robust Video Matting (RVM)
+# Robust Video Matting (RVM) 
 
 ![Teaser](/documentation/image/teaser.gif)
 
