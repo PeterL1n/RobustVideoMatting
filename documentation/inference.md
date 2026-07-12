@@ -41,7 +41,7 @@ Adjust `downsample_ratio` base on the video content. If the shot is portrait, a 
 <br>
 
 ### Recurrent States
-The model is a recurrent neural network. You must process frames sequentially and recycle its recurrent states. 
+The model is a recurrent neural network. You must process frames sequentially and recycle its recurrent states.
 
 **Correct Way**
 
@@ -88,17 +88,17 @@ for src in YOUR_VIDEO:  # src can be [B, C, H, W] or [B, T, C, H, W]
     fgr, pha, *rec = model(src, *rec, downsample_ratio=0.25)
 ```
 
-* `src`: Input frame. 
-    * Can be of shape `[B, C, H, W]` or `[B, T, C, H, W]`. 
+* `src`: Input frame.
+    * Can be of shape `[B, C, H, W]` or `[B, T, C, H, W]`.
     * If `[B, T, C, H, W]`, a chunk of `T` frames can be given at once for better parallelism.
     * RGB input is normalized to `0~1` range.
 
-* `fgr, pha`: Foreground and alpha predictions. 
-    * Can be of shape `[B, C, H, W]` or `[B, T, C, H, W]` depends on `src`. 
+* `fgr, pha`: Foreground and alpha predictions.
+    * Can be of shape `[B, C, H, W]` or `[B, T, C, H, W]` depends on `src`.
     * `fgr` has `C=3` for RGB, `pha` has `C=1`.
     * Outputs normalized to `0~1` range.
-* `rec`: Recurrent states. 
-    * Type of `List[Tensor, Tensor, Tensor, Tensor]`. 
+* `rec`: Recurrent states.
+    * Type of `List[Tensor, Tensor, Tensor, Tensor]`.
     * Initial `rec` can be `List[None, None, None, None]`.
     * It has 4 recurrent states because the model has 4 ConvGRU layers.
     * All tensors are rank 4 regardless of `src` rank.
@@ -207,8 +207,8 @@ convert_video(frozen_model, ...args..., device='cuda', dtype=torch.float32)
 ## ONNX
 
 Model spec:
-* Inputs: [`src`, `r1i`, `r2i`, `r3i`, `r4i`, `downsample_ratio`]. 
-    * `src` is the RGB input frame of shape `[B, C, H, W]` normalized to `0~1` range. 
+* Inputs: [`src`, `r1i`, `r2i`, `r3i`, `r4i`, `downsample_ratio`].
+    * `src` is the RGB input frame of shape `[B, C, H, W]` normalized to `0~1` range.
     * `rXi` are the recurrent state inputs. Initial recurrent states are zero value tensors of shape `[1, 1, 1, 1]`.
     * `downsample_ratio` is a tensor of shape `[1]`.
     * Only `downsample_ratio` must have `dtype=FP32`. Other inputs must have `dtype` matching the loaded model's precision.
@@ -236,11 +236,11 @@ downsample_ratio = np.array([0.25], dtype=np.float32)  # dtype always FP32
 
 for src in YOUR_VIDEO:  # src is of [B, C, H, W] with dtype of the model.
     fgr, pha, *rec = sess.run([], {
-        'src': src, 
-        'r1i': rec[0], 
-        'r2i': rec[1], 
-        'r3i': rec[2], 
-        'r4i': rec[3], 
+        'src': src,
+        'r1i': rec[0],
+        'r2i': rec[1],
+        'r3i': rec[2],
+        'r4i': rec[3],
         'downsample_ratio': downsample_ratio
     })
 ```
@@ -329,7 +329,7 @@ model = ct.models.model.MLModel('rvm_mobilenetv3_1920x1080_s0.25_int8.mlmodel')
 r1, r2, r3, r4 = None, None, None, None
 
 for src in YOUR_VIDEO:  # src is PIL.Image.
-    
+
     if r1 is None:
         # Initial frame, do not provide recurrent states.
         inputs = {'src': src}
@@ -341,7 +341,7 @@ for src in YOUR_VIDEO:  # src is PIL.Image.
 
     fgr = outputs['fgr']  # PIL.Image.
     pha = outputs['pha']  # PIL.Image.
-    
+
     r1 = outputs['r1o']  # Numpy array.
     r2 = outputs['r2o']  # Numpy array.
     r3 = outputs['r3o']  # Numpy array.
@@ -349,4 +349,4 @@ for src in YOUR_VIDEO:  # src is PIL.Image.
 
 ```
 
-Our CoreML models only support fixed resolutions. If you need other resolutions, you can export them yourself. See [coreml branch](https://github.com/PeterL1n/RobustVideoMatting/tree/coreml) for model export. 
+Our CoreML models only support fixed resolutions. If you need other resolutions, you can export them yourself. See [coreml branch](https://github.com/PeterL1n/RobustVideoMatting/tree/coreml) for model export.

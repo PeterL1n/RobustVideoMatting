@@ -88,17 +88,17 @@ for src in YOUR_VIDEO:  # src 可以是 [B, C, H, W] 或 [B, T, C, H, W]
     fgr, pha, *rec = model(src, *rec, downsample_ratio=0.25)
 ```
 
-* `src`: 输入帧（Source）。 
-    * 可以是 `[B, C, H, W]` 或 `[B, T, C, H, W]` 的张量。 
+* `src`: 输入帧（Source）。
+    * 可以是 `[B, C, H, W]` 或 `[B, T, C, H, W]` 的张量。
     * 若是 `[B, T, C, H, W]`，可给模型一次 `T` 帧，做一小段一小段地处理，用于更好的并行计算。
     * RGB 通道输入，范围为 `0~1`。
 
-* `fgr, pha`: 前景（Foreground）和透明度通道（Alpha）的预测。 
+* `fgr, pha`: 前景（Foreground）和透明度通道（Alpha）的预测。
     * 根据`src`，可为 `[B, C, H, W]` 或 `[B, T, C, H, W]` 的输出。
     * `fgr` 是 RGB 三通道，`pha` 为一通道。
     * 输出范围为 `0~1`。
-* `rec`: 循环记忆（Recurrent States）。 
-    * `List[Tensor, Tensor, Tensor, Tensor]` 类型。 
+* `rec`: 循环记忆（Recurrent States）。
+    * `List[Tensor, Tensor, Tensor, Tensor]` 类型。
     * 初始 `rec` 为 `List[None, None, None, None]`。
     * 有四个记忆，因为网络使用四个 `ConvGRU` 层。
     * 无论 `src` 的 Rank，所有记忆张量的 Rank 为 4。
@@ -207,7 +207,7 @@ convert_video(frozen_model, ...args..., device='cuda', dtype=torch.float32)
 ## ONNX
 
 模型规格:
-* 输入: [`src`, `r1i`, `r2i`, `r3i`, `r4i`, `downsample_ratio`]. 
+* 输入: [`src`, `r1i`, `r2i`, `r3i`, `r4i`, `downsample_ratio`].
     * `src`：输入帧，RGB 通道，形状为 `[B, C, H, W]`，范围为`0~1`。
     * `rXi`：记忆输入，初始值是是形状为 `[1, 1, 1, 1]` 的零张量。
     * `downsample_ratio` 下采样比，张量形状为 `[1]`。
@@ -236,11 +236,11 @@ downsample_ratio = np.array([0.25], dtype=np.float32)  # 必须是 FP32
 
 for src in YOUR_VIDEO:  # src 张量是 [B, C, H, W] 形状，必须用模型一样的 dtype
     fgr, pha, *rec = sess.run([], {
-        'src': src, 
-        'r1i': rec[0], 
-        'r2i': rec[1], 
-        'r3i': rec[2], 
-        'r4i': rec[3], 
+        'src': src,
+        'r1i': rec[0],
+        'r2i': rec[1],
+        'r3i': rec[2],
+        'r4i': rec[3],
         'downsample_ratio': downsample_ratio
     })
 ```
@@ -330,7 +330,7 @@ model = ct.models.model.MLModel('rvm_mobilenetv3_1920x1080_s0.25_int8.mlmodel')
 r1, r2, r3, r4 = None, None, None, None
 
 for src in YOUR_VIDEO:  # src 是 PIL.Image.
-    
+
     if r1 is None:
         # 初始帧, 不用提供循环记忆
         inputs = {'src': src}
@@ -342,7 +342,7 @@ for src in YOUR_VIDEO:  # src 是 PIL.Image.
 
     fgr = outputs['fgr']  # PIL.Image
     pha = outputs['pha']  # PIL.Image
-    
+
     r1 = outputs['r1o']  # Numpy array
     r2 = outputs['r2o']  # Numpy array
     r3 = outputs['r3o']  # Numpy array

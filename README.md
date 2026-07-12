@@ -18,7 +18,7 @@ Official repository for the paper [Robust High-Resolution Video Matting with Tem
 <br>
 
 ## Showreel
-Watch the showreel video ([YouTube](https://youtu.be/Jvzltozpbpk), [Bilibili](https://www.bilibili.com/video/BV1Z3411B7g7/)) to see the model's performance. 
+Watch the showreel video ([YouTube](https://youtu.be/Jvzltozpbpk), [Bilibili](https://www.bilibili.com/video/BV1Z3411B7g7/)) to see the model's performance.
 
 <p align="center">
     <a href="https://youtu.be/Jvzltozpbpk">
@@ -33,7 +33,7 @@ All footage in the video are available in [Google Drive](https://drive.google.co
 
 ## Demo
 * [Webcam Demo](https://peterl1n.github.io/RobustVideoMatting/#/demo): Run the model live in your browser. Visualize recurrent states.
-* [Colab Demo](https://colab.research.google.com/drive/10z-pNKRnVNsp0Lq9tH1J_XPZ7CBC_uHm?usp=sharing): Test our model on your own videos with free GPU. 
+* [Colab Demo](https://colab.research.google.com/drive/10z-pNKRnVNsp0Lq9tH1J_XPZ7CBC_uHm?usp=sharing): Test our model on your own videos with free GPU.
 
 <br>
 
@@ -182,7 +182,7 @@ downsample_ratio = 0.25                                # Adjust based on your vi
 with torch.no_grad():
     for src in DataLoader(reader):                     # RGB tensor normalized to 0 ~ 1.
         fgr, pha, *rec = model(src.cuda(), *rec, downsample_ratio)  # Cycle the recurrent states.
-        com = fgr * pha + bgr * (1 - pha)              # Composite to green background. 
+        com = fgr * pha + bgr * (1 - pha)              # Composite to green background.
         writer.write(com)                              # Write frame.
 ```
 
@@ -220,7 +220,7 @@ Speed is measured with `inference_speed_test.py` for reference.
 * Note 2: GPUs before Turing architecture does not support FP16 inference, so GTX 1080 Ti uses FP32.
 * Note 3: We only measure tensor throughput. The provided video conversion script in this repo is expected to be much slower, because it does not utilize hardware video encoding/decoding and does not have the tensor transfer done on parallel threads. If you are interested in implementing hardware video encoding/decoding in Python, please refer to [PyNvCodec](https://github.com/NVIDIA/VideoProcessingFramework).
 
-<br>  
+<br>
 
 ## Project Members
 * [Shanchuan Lin](https://www.linkedin.com/in/shanchuanlin/)
@@ -235,7 +235,7 @@ Speed is measured with `inference_speed_test.py` for reference.
 * [NCNN C++ Android](https://github.com/FeiGeChuanShu/ncnn_Android_RobustVideoMatting) ([@FeiGeChuanShu](https://github.com/FeiGeChuanShu))
 * [lite.ai.toolkit](https://github.com/DefTruth/RobustVideoMatting.lite.ai.toolkit) ([@DefTruth](https://github.com/DefTruth))
 * [Gradio Web Demo](https://huggingface.co/spaces/akhaliq/Robust-Video-Matting) ([@AK391](https://github.com/AK391))
-* [Unity Engine demo with NatML](https://hub.natml.ai/@natsuite/robust-video-matting) ([@natsuite](https://github.com/natsuite))  
+* [Unity Engine demo with NatML](https://hub.natml.ai/@natsuite/robust-video-matting) ([@natsuite](https://github.com/natsuite))
 * [MNN C++ Demo](https://github.com/DefTruth/lite.ai.toolkit/blob/main/lite/mnn/cv/mnn_rvm.cpp) ([@DefTruth](https://github.com/DefTruth))
 * [TNN C++ Demo](https://github.com/DefTruth/lite.ai.toolkit/blob/main/lite/tnn/cv/tnn_rvm.cpp) ([@DefTruth](https://github.com/DefTruth))
 
